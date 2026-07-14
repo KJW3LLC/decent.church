@@ -2,8 +2,8 @@ name: Generate Church Article
 
 on:
   schedule:
-    # Run daily at 10:17 AM UTC (5:17 AM EST / 2:17 AM PST) - off-peak time
-    - cron: '17 10 * * *'
+    # Run daily at 1:33 PM UTC (8:33 AM EST / 5:33 AM PST) - off-peak time
+    - cron: '33 13 * * *'
   workflow_dispatch:  # Allow manual triggering
 
 permissions:
