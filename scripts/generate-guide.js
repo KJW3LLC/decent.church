@@ -4,7 +4,7 @@ const path = require('path');
 
 // NVIDIA API Configuration
 const NVIDIA_API_BASE = 'https://integrate.api.nvidia.com/v1';
-const NVIDIA_MODEL = 'nvidia/llama-3.3-nemotron-super-49b-v1.5';
+const NVIDIA_MODEL = process.env.NVIDIA_TEXT_MODEL || 'moonshotai/kimi-k2.5';
 
 // File paths
 const TOPICS_FILE = path.join(__dirname, '..', 'topics.json');
@@ -212,10 +212,14 @@ function isTransientError(error) {
 
   // Check for network errors
   if (error.code) {
-    const transientCodes = ['ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED', 'ENETUNREACH'];
+    const transientCodes = ['ECONNRESET', 'ETIMEDOUT', 'ECONNREFUSED', 'ENETUNREACH', 'ECONNABORTED', 'EAI_AGAIN', 'ENOTFOUND', 'ESOCKETTIMEDOUT'];
     if (transientCodes.includes(error.code)) {
       return true;
     }
+  }
+
+  if (error.message && /timeout|socket hang up|network/i.test(error.message)) {
+    return true;
   }
 
   return false;
@@ -323,15 +327,16 @@ Write only the Markdown article body. Do not include YAML front matter.`;
           ],
           temperature: 0.7,
           top_p: 1,
-          max_tokens: 8192,
-          stream: false
+          max_tokens: 5000,
+          stream: false,
+          mode: 'instant'
         },
         {
           headers: {
             'Authorization': `Bearer ${process.env.NVIDIA_API_KEY}`,
             'Content-Type': 'application/json'
           },
-          timeout: 180000 // 3 minute timeout (increased from default)
+          timeout: 240000 // 4 minute timeout for slower text-generation responses
         }
       );
 
@@ -359,9 +364,10 @@ Write only the Markdown article body. Do not include YAML front matter.`;
         console.log(`  Transient error detected. Waiting ${waitTime/1000}s before retry...`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
       } else {
-        // Non-transient error or out of retries - throw immediately
-        console.error('NVIDIA API Error:', error.response?.data || error.message);
-        throw error;
+        // Non-transient error or out of retries - throw a concise error for CI logs
+        const apiDetails = error.response?.data ? JSON.stringify(error.response.data) : error.message;
+        console.error('NVIDIA API Error:', apiDetails);
+        throw new Error(`Text generation failed after ${attempt} attempt(s): ${statusCode} - ${errorMsg}`);
       }
     }
   }
@@ -897,7 +903,7 @@ async function main() {
     console.log(`Total guides generated: ${generatedTopics.length}/${topics.length}`);
 
   } catch (error) {
-    console.error('Error generating guide:', error);
+    console.error('Error generating guide:', error.message || error);
     process.exit(1);
   }
 }
