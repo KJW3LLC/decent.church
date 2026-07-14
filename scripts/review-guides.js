@@ -11,30 +11,29 @@ const GUIDES_DIR = path.join(__dirname, '..', '_guides');
 const REVIEW_REPORT_FILE = path.join(__dirname, '..', 'guide-review-report.json');
 
 // Review criteria
-const REVIEW_PROMPT = `You are a content quality reviewer for an AI educational website called "For Example AI". Review this guide and provide a detailed assessment.
+const REVIEW_PROMPT = `You are a content quality reviewer for decent.church. Review this Scripture-grounded article and provide a detailed assessment.
 
 REVIEW CRITERIA:
 
 1. COMPLETENESS (Score 1-10)
-   - Does the guide have all expected sections? (Introduction, Prerequisites, Main Content, Examples, Try It Yourself, Key Takeaways, Further Reading)
+   - Does the article have all expected sections? (Introduction, Scripture Foundation, What This Looks Like in Daily Life, Questions for Reflection, A Simple Practice This Week, Prayer, Key Takeaways, Further Reading)
    - Are any sections incomplete or cut off mid-sentence?
-   - Is the content depth appropriate for the difficulty level?
+   - Is the content depth appropriate for the path level?
 
-2. COMPELLING QUALITY (Score 1-10)
-   - Is the writing engaging and conversational?
-   - Are there good analogies and real-world examples?
-   - Does it have personality without being unprofessional?
-   - Are there visual breaks (emojis, blockquotes, varied formatting)?
+2. PASTORAL QUALITY (Score 1-10)
+   - Is the writing warm, clear, and welcoming?
+   - Does it honor broad Judeo-Christian values without becoming sectarian or partisan?
+   - Does it center loving God and loving neighbor?
+   - Does it avoid emojis, gimmicks, and manipulative emotional language?
 
-3. ACCURACY (Score 1-10)
-   - Are technical concepts explained correctly?
-   - Are there any factual errors or outdated information?
-   - Are links and references valid and relevant?
-   - Is the difficulty level appropriate for the content?
+3. SCRIPTURAL INTEGRITY (Score 1-10)
+   - Are Scripture references relevant and handled responsibly?
+   - Are NIV references used where Scripture wording or translation is specified?
+   - Are claims appropriately humble, practical, and grounded in the passages?
+   - Are links and further reading relevant?
 
 4. SPECIFIC ISSUES
-   - List any specific problems found (incomplete sections, errors, missing content, etc.)
-   - Note any outdated information (especially if guide is from before 2025)
+   - List any specific problems found, including missing sections, weak Scripture handling, tone issues, unsupported claims, or formatting problems.
 
 IMPORTANT: Respond with ONLY valid JSON. No markdown formatting, no code blocks, no additional text.
 
@@ -92,7 +91,7 @@ Difficulty: ${guideData.frontMatter.difficulty || 'Unknown'}
 Date: ${guideData.frontMatter.date || 'Unknown'}
 Estimated Time: ${guideData.frontMatter.estimated_time || 'Unknown'}
 
-CONTENT:
+ARTICLE CONTENT:
 ${guideData.content}
 
 Provide your review in the JSON format specified above.`;
@@ -237,9 +236,9 @@ function generateSummary(results) {
 async function fixGuide(guideData, review, filename, filePath) {
   console.log(`  🔧 Fixing issues...`);
 
-  const fixPrompt = `You are a content editor for "For Example AI". You previously reviewed this guide and found issues. Now fix them.
+  const fixPrompt = `You are a content editor for decent.church. You previously reviewed this Scripture-grounded article and found issues. Now fix them.
 
-ORIGINAL GUIDE:
+ORIGINAL ARTICLE:
 Title: ${guideData.frontMatter.title || 'Unknown'}
 Difficulty: ${guideData.frontMatter.difficulty || 'Unknown'}
 
@@ -262,13 +261,13 @@ ${review.recommendations.map(r => `- ${r}`).join('\n')}
 
 INSTRUCTIONS:
 1. Fix ALL issues identified in the review
-2. Keep the same structure (Introduction, Prerequisites, Main Content, Examples, Try It Yourself, Key Takeaways, Further Reading)
-3. Maintain the conversational, engaging tone with analogies and personality
+2. Keep the expected structure (Introduction, Scripture Foundation, What This Looks Like in Daily Life, Questions for Reflection, A Simple Practice This Week, Prayer, Key Takeaways, Further Reading)
+3. Maintain a warm, welcoming, pastoral tone centered on loving God and loving neighbor
 4. Ensure all sections are complete and at the appropriate depth for ${guideData.frontMatter.difficulty} difficulty
-5. Fix any formatting issues, add missing links, correct technical errors
-6. Return ONLY the updated markdown content (no frontmatter, no explanations)
+5. Fix formatting issues, add relevant links, strengthen Scripture handling, and remove any emojis
+6. Use NIV for Scripture references and return ONLY the updated markdown content (no frontmatter, no explanations)
 
-Provide the complete, improved guide content:`;
+Provide the complete, improved article content:`;
 
   try {
     const response = await axios.post(

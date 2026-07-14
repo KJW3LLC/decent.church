@@ -1,106 +1,58 @@
 ---
-layout: null
 permalink: /learning-paths.json
 ---
 {
-  "meta": {
-    "generated": "{{ site.time | date_to_xmlschema }}",
-    "version": "1.0"
-  },
-  "paths": [
+  "learning_paths": [
     {
-      "id": "ai-fundamentals",
-      "name": "AI Fundamentals for Beginners",
-      "slug": "ai-fundamentals",
-      "description": "Start your AI journey from scratch with beginner-friendly guides",
+      "id": "finding-a-church-family",
+      "name": "Finding a Church Family",
+      "slug": "finding-a-church-family",
+      "description": "Discern what healthy Christian community can look like and how to take wise next steps.",
       "difficulty": "beginner",
-      "estimated_hours": 8,
       "guides": [
-        "what-is-artificial-intelligence",
-        "the-difference-between-ai-machine-learning-and-deep-learning",
-        "what-can-ai-do-current-capabilities-and-limitations",
-        "ai-in-your-daily-life-examples-you-might-not-notice"
+        "how-to-begin-looking-for-a-church-family",
+        "what-to-look-for-in-a-healthy-congregation",
+        "questions-to-ask-before-joining-a-church",
+        "how-to-become-part-of-a-church-community"
       ]
     },
     {
-      "id": "transformers-mastery",
-      "name": "Understanding Transformers",
-      "slug": "understanding-transformers",
-      "description": "Master transformer architecture from basics to advanced GPT models",
-      "difficulty": "intermediate",
-      "estimated_hours": 12,
-      "guides": [
-        "how-chatgpt-works-a-simple-explanation",
-        "understanding-transformer-architecture",
-        "understanding-attention-mechanisms",
-        "the-architecture-of-gpt-models"
-      ]
-    },
-    {
-      "id": "neural-networks-basics",
-      "name": "Neural Networks Fundamentals",
-      "slug": "neural-networks-fundamentals",
-      "description": "Learn how neural networks work and train effectively",
-      "difficulty": "intermediate",
-      "estimated_hours": 10,
-      "guides": [
-        "what-is-a-neural-network",
-        "how-neural-networks-learn-backpropagation-explained",
-        "understanding-activation-functions"
-      ]
-    },
-    {
-      "id": "ml-training",
-      "name": "Machine Learning Training Essentials",
-      "slug": "ml-training-essentials",
-      "description": "Master the fundamentals of training machine learning models",
-      "difficulty": "intermediate",
-      "estimated_hours": 10,
-      "guides": [
-        "understanding-loss-functions",
-        "gradient-descent-optimization-algorithms",
-        "understanding-model-parameters-and-hyperparameters",
-        "overfitting-and-underfitting-in-machine-learning"
-      ]
-    },
-    {
-      "id": "prompt-engineering",
-      "name": "Prompt Engineering Mastery",
-      "slug": "prompt-engineering-mastery",
-      "description": "Learn to communicate effectively with AI language models",
+      "id": "finding-your-faith",
+      "name": "Finding Your Faith",
+      "slug": "finding-your-faith",
+      "description": "A gentle path for seekers, returners, and anyone learning to trust God one step at a time.",
       "difficulty": "beginner",
-      "estimated_hours": 6,
       "guides": [
-        "how-to-write-better-prompts-for-ai",
-        "advanced-prompt-engineering-techniques",
-        "prompt-engineering-for-developers"
+        "finding-your-faith-one-honest-step-at-a-time",
+        "bringing-your-doubts-to-god",
+        "learning-to-trust-god-when-faith-feels-small",
+        "building-a-daily-rhythm-of-faith"
       ]
     },
     {
-      "id": "ai-ethics",
-      "name": "AI Ethics & Responsibility",
-      "slug": "ai-ethics-responsibility",
-      "description": "Understand the ethical implications and responsibilities in AI",
+      "id": "discerning-purpose",
+      "name": "Discerning Purpose",
+      "slug": "discerning-purpose",
+      "description": "Explore calling, gifts, wisdom, and ordinary faithfulness through Scripture and community.",
       "difficulty": "intermediate",
-      "estimated_hours": 8,
       "guides": [
-        "the-environmental-impact-of-training-ai-models",
-        "ai-ethics-privacy-consent-and-data-rights",
-        "bias-and-fairness-in-ai-systems",
-        "ai-safety-and-alignment"
+        "discerning-your-purpose-with-god",
+        "listening-for-wisdom-in-scripture-prayer-and-community",
+        "using-your-gifts-to-love-god-and-neighbor",
+        "when-purpose-feels-ordinary"
       ]
     },
     {
-      "id": "ai-in-production",
-      "name": "AI in Production (MLOps Basics)",
-      "slug": "ai-in-production",
-      "description": "Deploy and maintain AI models in production environments",
-      "difficulty": "advanced",
-      "estimated_hours": 10,
+      "id": "loving-god-and-neighbor",
+      "name": "Loving God and Neighbor",
+      "slug": "loving-god-and-neighbor",
+      "description": "Practice the great commandments in worship, mercy, hospitality, truth, and daily life.",
+      "difficulty": "intermediate",
       "guides": [
-        "what-is-model-drift",
-        "what-is-model-monitoring-in-production",
-        "what-is-model-validation-pipeline"
+        "loving-god-with-heart-soul-mind-and-strength",
+        "loving-your-neighbor-in-practical-ways",
+        "welcoming-people-who-are-different-from-you",
+        "practicing-mercy-without-losing-truth"
       ]
     }
   ]

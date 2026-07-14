@@ -7,7 +7,15 @@
         {% endif %}
         <div class="card-content">
             <div class="card-header">
-                <span class="difficulty difficulty-{{ include.guide.difficulty }}">{{ include.guide.difficulty | capitalize }}</span>
+                {% assign path_label = include.guide.difficulty | capitalize %}
+                {% if include.guide.difficulty == 'beginner' %}
+                    {% assign path_label = 'Starting Out' %}
+                {% elsif include.guide.difficulty == 'intermediate' %}
+                    {% assign path_label = 'Growing' %}
+                {% elsif include.guide.difficulty == 'advanced' %}
+                    {% assign path_label = 'Going Deeper' %}
+                {% endif %}
+                <span class="difficulty difficulty-{{ include.guide.difficulty }}">{{ path_label }}</span>
                 <span class="estimated-time">{{ include.guide.estimated_time }}</span>
             </div>
         <h2 class="card-title">{{ include.guide.title }}</h2>

@@ -26,7 +26,7 @@ function isValidDifficulty(difficulty) {
 
 // Main function
 async function addTopic() {
-  console.log('\n📝 Add New Topic to For Example AI\n');
+  console.log('\nAdd New Article Topic to decent.church\n');
   console.log('This will add a new topic to topics.json\n');
 
   try {

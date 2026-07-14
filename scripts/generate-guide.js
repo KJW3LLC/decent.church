@@ -248,64 +248,68 @@ This guide is part ${topic.series.part} of ${topic.series.total} in the "${topic
 `;
       }
 
-      const prompt = `Create an educational guide about "${topic.title}" for an AI learning website called "For Example AI".
+      const prompt = `Create a Scripture-grounded article about "${topic.title}" for decent.church.
 ${seriesContext}
-WRITING STYLE & PERSONALITY:
-- Write with personality! Be conversational, enthusiastic, and human
-- Use "I" and "we" occasionally to create connection with readers
-- Include personal observations, opinions, or insights where appropriate
-- Share why YOU think this topic is interesting or important
-- Use humor sparingly but effectively
-- Show passion for teaching - let your excitement about AI shine through
-- Write like you're explaining to a curious friend over coffee, not lecturing
-- Appropriate for ${topic.difficulty} level readers
+MISSION AND THEOLOGICAL POSTURE:
+- Write from a broadly Judeo-Christian perspective centered on loving God and loving neighbor.
+- Be welcoming to seekers, returning believers, lifelong Christians, and people carrying questions or church hurt.
+- Ground counsel in Scripture, especially the teaching of Jesus, wisdom literature, prophets, apostles, and the great commandments.
+- Use NIV as the Scripture reference basis. Prefer references and brief excerpts over long quotations.
+- Include this note when quoting Scripture: Scripture quotations are from the New International Version (NIV).
+- Avoid partisan politics, denominational scorekeeping, culture-war framing, and claims that one tradition alone represents the whole church.
+- Be pastoral and practical. Do not shame readers. Invite them toward faith, wisdom, community, repentance, mercy, and hope.
 
-VISUAL FORMATTING (CRITICAL - FOLLOW EXACTLY):
-- ALWAYS use blockquote syntax for callout boxes. Each callout MUST start with > character
-- Callout format examples (COPY THIS EXACT FORMAT):
-  > **💡 Pro Tip:** Your tip text here
+WRITING STYLE:
+- Conversational, gentle, clear, and mature.
+- Use "we" more than "you" when naming common struggles.
+- Avoid hype, sarcasm, and insider jargon.
+- Do not use emojis anywhere.
+- Appropriate for ${topic.difficulty} level readers.
 
-  > **⚠️ Watch Out:** Your warning text here
+VISUAL FORMATTING RULES:
+- Do not use emojis in titles, headings, callouts, lists, or body copy.
+- Use Markdown only.
+- Use blockquote syntax for callout boxes. Each callout must start with >.
+- Callout examples:
+  > **Pastoral Note:** A short word of encouragement.
 
-  > **🎯 Key Insight:** Your insight text here
+  > **Scripture Reflection:** A brief reflection connected to a Bible reference.
 
-- DO NOT write callouts as plain bold text like **💡 Pro Tip:**
-- ALWAYS include the > character at the start of callout lines
-- Add emojis strategically in headers and callouts to add visual interest
-- Use **bold** liberally for emphasis
-- Create variety in section structure
+  > **Practice:** A concrete step the reader can try this week.
+- Use **bold** sparingly for emphasis.
+- Section headers must use ##.
 
-CONTENT STRUCTURE:
-1. Article Title (H1 with equals signs underneath) - Format as: **Title Text** 🚨 followed by a line of equals signs
-2. Introduction (2-3 sentences with personality - hook the reader!)
-3. Prerequisites (if any, or state "No prerequisites needed") - use ## header
-4. Step-by-step explanation with clear ## headers (3-5 main sections with varied formatting)
-5. Real-world examples with personal commentary on why they matter - use ## header
-6. Try It Yourself (practical, specific suggestions) - use ## header
-7. Key Takeaways (bullet points) - use ## header
-8. Further Reading (2-3 ACTUAL RESOURCES with real URLs as markdown links) - use ## header
+ARTICLE STRUCTURE:
+1. First line: the article title in bold only, with no emoji.
+2. Second line: equals signs, minimum 50 characters.
+3. Introduction: 2-3 warm sentences naming why this matters.
+4. ## Scripture Foundation
+   - Include 2-4 NIV references, with short quoted excerpts only when useful.
+   - Explain how the passages guide the topic.
+5. ## What This Looks Like in Daily Life
+   - Give practical, concrete examples.
+6. ## Questions for Reflection
+   - Include 4-6 thoughtful questions.
+7. ## A Simple Practice This Week
+   - Include one doable practice and one gentle next step.
+8. ## Prayer
+   - Write a short original prayer. Do not imitate a copyrighted prayer.
+9. ## Key Takeaways
+   - Use concise bullet points.
+10. ## Further Reading
+   - Prefer Scripture references and stable, real resources.
+   - Include 2-3 real links where possible, but do not invent URLs.
 
-CRITICAL HEADER FORMATTING RULES:
-- First line must be the article title as H1: **Title Text** 🚨
-- Second line must be equals signs (minimum 50 characters): ====================================================================
-- Use ## for all section headers (Prerequisites, main sections, Real-World Examples, Try It Yourself, Key Takeaways, Further Reading)
-- Example of correct title format:
-  **Understanding Neural Networks** 🚨
+HEADER FORMAT:
+- Correct title format:
+  **How to Begin Looking for a Church Family**
   ====================================================================
 
-  Your introduction text here...
-- DO NOT use just **bold text** for headers - they must be actual ## headers
-
 FURTHER READING FORMAT:
-Make these REAL, CLICKABLE links to actual resources. Format as:
-- [Resource Title](https://actual-url.com) - Brief description of what it offers
+- [Resource Title](https://actual-url.com) - Brief description
+- Scripture: Matthew 22:37-40; Micah 6:8; Hebrews 10:24-25
 
-Example:
-- [3Blue1Brown Neural Networks](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi) - Excellent visual explanation series
-- [Fast.ai Practical Deep Learning](https://course.fast.ai/) - Free hands-on course
-
-Write in Markdown format. Do NOT include the front matter (YAML) - only the content body.
-Be friendly, be human, be helpful!`;
+Write only the Markdown article body. Do not include YAML front matter.`;
 
       const response = await axios.post(
         `${NVIDIA_API_BASE}/chat/completions`,
@@ -429,38 +433,20 @@ function createFilename(title) {
 // Generate guide description from title
 function generateDescription(title, difficulty) {
   const starters = {
-    beginner: 'A beginner-friendly introduction to',
-    intermediate: 'Learn about',
-    advanced: 'A deep dive into'
+    beginner: 'A welcoming guide to',
+    intermediate: 'A practical reflection on',
+    advanced: 'A deeper scriptural look at'
   };
   return `${starters[difficulty]} ${title.toLowerCase()}`;
 }
 
-// Generate AI image prompt from topic
+// Generate article image prompt from topic
 function generateImagePrompt(topic) {
-  // Create a concise prompt for FLUX - avoid mentioning title to prevent text generation
-  // CRITICAL: Multiple emphatic instructions to prevent text generation
-  // Expand common acronyms to avoid content filtering issues
-  const keywords = topic.tags.slice(0, 3)
-    .map(tag => {
-      // Expand common ML/AI acronyms to avoid content filtering
-      const expansions = {
-        'cnn': 'convolutional networks',
-        'rnn': 'recurrent networks',
-        'gpt': 'generative models',
-        'ai': 'artificial intelligence',
-        'ml': 'machine learning',
-        'nlp': 'natural language processing',
-        'cv': 'computer vision'
-      };
-      return expansions[tag.toLowerCase()] || tag;
-    })
-    .join(', ');
+  const keywords = topic.tags.slice(0, 3).join(', ');
 
   return {
-    // Generic prompt without topic keywords to avoid content filtering
-    prompt: `Abstract technology background: vibrant gradient colors blending blue purple and teal, geometric patterns, flowing curved lines, glowing points, futuristic digital design, clean modern minimalist style, pure visual composition, high quality digital art, smooth gradients and geometric shapes`,
-    negative_prompt: `text, letters, words, typography, watermark, logo`
+    prompt: `Warm editorial photo illustration for a faith and community article about ${keywords}: welcoming church entryway, people in kind conversation, open Bible on a table, soft natural light, peaceful neighborhood setting, gentle hopeful atmosphere, realistic but polished, no readable text, no logos, no denominational branding`,
+    negative_prompt: `text, letters, words, typography, watermark, logo, political symbols, harsh lighting, empty megachurch stage`
   };
 }
 

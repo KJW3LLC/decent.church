@@ -10,31 +10,11 @@ if (!fs.existsSync(IMAGES_DIR)) {
   fs.mkdirSync(IMAGES_DIR, { recursive: true });
 }
 
-// Generate AI image prompt from topic
+// Generate article image prompt from topic
 function generateImagePrompt(title, tags) {
-  // Create a concise prompt for FLUX - avoid mentioning title to prevent text generation
-  // CRITICAL: Multiple emphatic instructions to prevent text generation
-  // Expand common acronyms to avoid content filtering issues
-  const keywords = tags.slice(0, 3)
-    .map(tag => {
-      // Expand common ML/AI acronyms to avoid content filtering
-      const expansions = {
-        'cnn': 'convolutional networks',
-        'rnn': 'recurrent networks',
-        'gpt': 'generative models',
-        'ai': 'artificial intelligence',
-        'ml': 'machine learning',
-        'nlp': 'natural language processing',
-        'cv': 'computer vision'
-      };
-      return expansions[tag.toLowerCase()] || tag;
-    })
-    .join(', ');
-
   return {
-    // Generic prompt without topic keywords to avoid content filtering
-    prompt: `Abstract technology background: vibrant gradient colors blending blue purple and teal, geometric patterns, flowing curved lines, glowing points, futuristic digital design, clean modern minimalist style, pure visual composition, high quality digital art, smooth gradients and geometric shapes`,
-    negative_prompt: `text, letters, words, typography, watermark, logo`
+    prompt: `Warm editorial photo illustration for a Scripture-grounded article about faith, church family, purpose, and loving your neighbor. Welcoming church entryway, people in kind conversation, an open Bible, soft natural light, hopeful and grounded, inclusive community, no text, no letters, no watermark, no logo, no denominational branding`,
+    negative_prompt: `text, letters, words, typography, watermark, logo, denomination symbols, political signs`
   };
 }
 
@@ -108,7 +88,7 @@ async function generateAndSaveImage(title, tags) {
   const filename = `${slug}.jpg`;
   const filepath = path.join(IMAGES_DIR, filename);
 
-  console.log(`Generating AI image for: ${title}`);
+  console.log(`Generating article image for: ${title}`);
 
   const prompt = generateImagePrompt(title, tags);
   let imageBase64 = null;
