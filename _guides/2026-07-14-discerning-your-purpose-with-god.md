@@ -13,6 +13,7 @@ series:
   name: "Discerning Purpose"
   part: 1
   total: 4
+  next: "listening-for-wisdom-in-scripture-prayer-and-community"
 ---
 **Discerning Your Purpose with God**  
 ====================================================================
