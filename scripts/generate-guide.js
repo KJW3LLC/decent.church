@@ -4,7 +4,7 @@ const path = require('path');
 
 // NVIDIA API Configuration
 const NVIDIA_API_BASE = 'https://integrate.api.nvidia.com/v1';
-const NVIDIA_MODEL = process.env.NVIDIA_TEXT_MODEL || 'moonshotai/kimi-k2.5';
+const NVIDIA_MODEL = process.env.NVIDIA_TEXT_MODEL || 'nvidia/llama-3.3-nemotron-super-49b-v1.5';
 
 // File paths
 const TOPICS_FILE = path.join(__dirname, '..', 'topics.json');
@@ -328,8 +328,7 @@ Write only the Markdown article body. Do not include YAML front matter.`;
           temperature: 0.7,
           top_p: 1,
           max_tokens: 5000,
-          stream: false,
-          mode: 'instant'
+          stream: false
         },
         {
           headers: {
