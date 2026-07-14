@@ -12,9 +12,11 @@ if (!fs.existsSync(IMAGES_DIR)) {
 
 // Generate article image prompt from topic
 function generateImagePrompt(title, tags) {
+  const keywords = tags.slice(0, 3).join(', ');
+
   return {
-    prompt: `Warm editorial photo illustration for a Scripture-grounded article about faith, church family, purpose, and loving your neighbor. Welcoming church entryway, people in kind conversation, an open Bible, soft natural light, hopeful and grounded, inclusive community, no text, no letters, no watermark, no logo, no denominational branding`,
-    negative_prompt: `text, letters, words, typography, watermark, logo, denomination symbols, political signs`
+    prompt: `Stained glass illustration for a Scripture-grounded article about ${title}. Use symbolic Christian visual language connected to ${keywords}: fish, cups, water, sheep, bread, paths, light, vines, or abstract sacred geometry. Inspired by Notre Dame stained glass rose windows and medieval rosette patterns, luminous jewel-toned glass pieces, lead came lines, radial symmetry or simple subject-centered composition, reverent and peaceful, no people, no faces, no readable text, no letters, no watermark, no logo, no denominational branding`,
+    negative_prompt: `people, person, human figure, faces, portraits, hands, crowds, text, letters, words, typography, watermark, logo, denomination symbols, political signs, photorealistic people`
   };
 }
 
