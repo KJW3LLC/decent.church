@@ -14,6 +14,7 @@ series:
   part: 2
   total: 4
   previous: "discerning-your-purpose-with-god"
+  next: "using-your-gifts-to-love-god-and-neighbor"
 ---
 **Listening for Wisdom in Scripture, Prayer, and Community**  
 ====================================================================
