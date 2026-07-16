@@ -14,6 +14,7 @@ series:
   part: 3
   total: 4
   previous: "listening-for-wisdom-in-scripture-prayer-and-community"
+  next: "when-purpose-feels-ordinary"
 ---
 **Using Your Gifts to Love God and Neighbor**  
 ====================================================================
