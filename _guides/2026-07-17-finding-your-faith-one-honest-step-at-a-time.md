@@ -13,6 +13,7 @@ series:
   name: "Finding Your Faith"
   part: 1
   total: 4
+  next: "bringing-your-doubts-to-god"
 ---
 **Finding Your Faith One Honest Step at a Time**  
 ====================================================================
