@@ -14,6 +14,7 @@ series:
   part: 2
   total: 4
   previous: "finding-your-faith-one-honest-step-at-a-time"
+  next: "learning-to-trust-god-when-faith-feels-small"
 ---
 **Bringing Your Doubts to God**  
 ====================================================================
