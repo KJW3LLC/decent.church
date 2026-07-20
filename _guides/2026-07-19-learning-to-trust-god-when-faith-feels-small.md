@@ -14,6 +14,7 @@ series:
   part: 3
   total: 4
   previous: "bringing-your-doubts-to-god"
+  next: "building-a-daily-rhythm-of-faith"
 ---
 **Learning to Trust God When Faith Feels Small**  
 ====================================================================
