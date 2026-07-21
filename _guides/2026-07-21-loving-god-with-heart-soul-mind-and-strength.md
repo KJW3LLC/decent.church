@@ -13,6 +13,7 @@ series:
   name: "Loving God and Neighbor"
   part: 1
   total: 4
+  next: "loving-your-neighbor-in-practical-ways"
 ---
 **Loving God with Heart, Soul, Mind, and Strength**  
 ====================================================================
