@@ -14,6 +14,7 @@ series:
   part: 2
   total: 4
   previous: "loving-god-with-heart-soul-mind-and-strength"
+  next: "welcoming-people-who-are-different-from-you"
 ---
 
 **Loving Your Neighbor in Practical Ways**
