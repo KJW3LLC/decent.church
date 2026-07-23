@@ -14,6 +14,7 @@ series:
   part: 3
   total: 4
   previous: "loving-your-neighbor-in-practical-ways"
+  next: "practicing-mercy-without-losing-truth"
 ---
 
 **Welcoming People Who Are Different From You**  
