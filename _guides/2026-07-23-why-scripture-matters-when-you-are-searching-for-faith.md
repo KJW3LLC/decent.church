@@ -13,6 +13,7 @@ series:
   name: "Scripture and Prayer for Seekers"
   part: 1
   total: 4
+  next: "how-to-read-the-bible-when-you-do-not-know-where-to-start"
 ---
 
 **Why Scripture Matters When You Are Searching for Faith**  
