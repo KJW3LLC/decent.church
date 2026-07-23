@@ -67,8 +67,8 @@ function generateImagePrompt(title, tags) {
   const keywords = tags.slice(0, 3).join(', ');
 
   return {
-    prompt: `Mosaic illustration for a Scripture-grounded article about ${title}. Create a biblical-looking landscape connected to ${keywords}: desert paths, hills, olive trees, rivers, still waters, gardens, fields, shepherding country, ancient stone roads, dawn light, simple wooden cups, bread, fish, vines, or peaceful wilderness. Use hand-laid mosaic tile texture, earthy natural colors, subtle gold and blue accents, ancient Near Eastern landscape atmosphere, reverent and peaceful composition, no people, no faces, no readable text, no letters, no watermark, no logo, no denominational branding`,
-    negative_prompt: `people, person, human figure, faces, portraits, hands, crowds, text, letters, words, typography, watermark, logo, denomination symbols, political signs, photorealistic people, stained glass, lead came, window panes`
+    prompt: `Stained glass illustration for a Scripture-grounded article about ${title}. Use symbolic Christian visual language connected to ${keywords}: fish, cups, water, sheep, bread, paths, light, vines, or abstract sacred geometry. Inspired by Notre Dame stained glass rose windows and medieval rosette patterns, luminous jewel-toned glass pieces, lead came lines, radial symmetry or simple subject-centered composition, reverent and peaceful, no people, no faces, no readable text, no letters, no watermark, no logo, no denominational branding`,
+    negative_prompt: `people, person, human figure, faces, portraits, hands, crowds, text, letters, words, typography, watermark, logo, denomination symbols, political signs, photorealistic people`
   };
 }
 
