@@ -14,6 +14,7 @@ series:
   part: 2
   total: 4
   previous: "why-scripture-matters-when-you-are-searching-for-faith"
+  next: "learning-to-pray-with-honesty-and-hope"
 ---
 
 **How to Read the Bible When You Do Not Know Where to Start**  
