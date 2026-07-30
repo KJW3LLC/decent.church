@@ -258,6 +258,86 @@ function isTransientError(error) {
   return false;
 }
 
+function validateGeneratedArticleContent(content, topic) {
+  const body = (content || '').trim();
+  const requiredSections = [
+    '## Scripture Foundation',
+    '## What This Looks Like in Daily Life',
+    '## Questions for Reflection',
+    '## A Simple Practice This Week',
+    '## Prayer',
+    '## Key Takeaways',
+    '## Further Reading'
+  ];
+
+  const failures = [];
+
+  if (body.length < 2500) {
+    failures.push('content is too short');
+  }
+
+  if (!body.startsWith(`**${topic.title}**`)) {
+    failures.push('missing required title line');
+  }
+
+  const titleUnderlinePattern = new RegExp('^\\*\\*.+\\*\\*\\s*\\n=+$', 'm');
+  if (!titleUnderlinePattern.test(body)) {
+    failures.push('missing title underline');
+  }
+
+  for (const section of requiredSections) {
+    if (!body.includes(section)) {
+      failures.push(`missing section: ${section}`);
+    }
+  }
+
+  const promptLeakPatterns = [
+    /we need to produce/i,
+    /create a scripture-grounded article/i,
+    /write only the markdown article body/i,
+    /do not include yaml front matter/i,
+    /article structure:/i,
+    /header format:/i
+  ];
+
+  if (promptLeakPatterns.some(pattern => pattern.test(body))) {
+    failures.push('prompt/instruction leakage detected');
+  }
+
+  const unkCount = (body.match(/<unk>/gi) || []).length;
+  if (unkCount > 0) {
+    failures.push(`generated unknown tokens detected: ${unkCount}`);
+  }
+
+  const invalidCharacterPattern = new RegExp('[\\u0000\\uFFFD]');
+  if (invalidCharacterPattern.test(body)) {
+    failures.push('invalid replacement/control characters detected');
+  }
+
+  const suspiciousTokenCount = (body.match(/(?:urp|webkit|LOG|Wonder|BX|ivu|tyw|inist)/g) || []).length;
+  if (suspiciousTokenCount > 12) {
+    failures.push(`suspicious token noise detected: ${suspiciousTokenCount}`);
+  }
+
+  const letters = body.match(/[A-Za-z]/g) || [];
+  const nonAsciiPattern = new RegExp('[^\\x00-\\x7F]', 'g');
+  const nonAscii = body.match(nonAsciiPattern) || [];
+  if (letters.length > 0 && nonAscii.length / letters.length > 0.18) {
+    failures.push('unusually high non-ASCII ratio');
+  }
+
+  const nivPattern = new RegExp('\\b(NIV|New International Version)\\b');
+  if (!nivPattern.test(body)) {
+    failures.push('missing NIV reference note');
+  }
+
+  if (failures.length > 0) {
+    const error = new Error(`Generated article failed quality validation: ${failures.join('; ')}`);
+    error.retryableGeneration = true;
+    throw error;
+  }
+}
+
 // Generate guide content with retry logic for transient errors
 async function generateGuideContentWithRetry(topic, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -377,14 +457,17 @@ Write only the Markdown article body. Do not include YAML front matter.`;
       // Strip thinking tokens emitted by reasoning models (e.g. Nemotron)
       content = content.replace(/<think>[\s\S]*?<\/think>\s*/g, '').trimStart();
 
+      validateGeneratedArticleContent(content, topic);
+
       // Validate all links in the generated content
       const validatedContent = await validateLinksInContent(content);
+      validateGeneratedArticleContent(validatedContent, topic);
 
       console.log('  ✓ Text generation successful');
       return validatedContent;
 
     } catch (error) {
-      const isTransient = isTransientError(error);
+      const isTransient = isTransientError(error) || error.retryableGeneration;
       const errorMsg = error.response?.data?.message || error.message;
       const statusCode = error.response?.status || error.code;
 
