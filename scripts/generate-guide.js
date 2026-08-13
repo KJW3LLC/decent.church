@@ -65,6 +65,37 @@ function saveGeneratedTopics(generatedTopics) {
   fs.writeFileSync(GENERATED_TOPICS_FILE, JSON.stringify(generatedTopics, null, 2));
 }
 
+function normalizeTitle(title) {
+  return String(title || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+}
+
+function getExistingGuideTitles() {
+  if (!fs.existsSync(GUIDES_DIR)) {
+    return [];
+  }
+
+  return fs.readdirSync(GUIDES_DIR)
+    .filter(file => file.endsWith('.md'))
+    .map(file => {
+      const content = fs.readFileSync(path.join(GUIDES_DIR, file), 'utf-8');
+      const titleMatch = content.match(/^title:\s*["'](.+?)["']\s*$/m);
+      return titleMatch ? titleMatch[1] : null;
+    })
+    .filter(Boolean);
+}
+
+function buildGeneratedTitleSet(generatedTopics) {
+  const titles = [
+    ...generatedTopics,
+    ...getExistingGuideTitles()
+  ];
+
+  return new Set(titles.map(normalizeTitle));
+}
+
 // Helper: Convert title to slug format for comparison
 function titleToSlug(title) {
   return title
@@ -81,18 +112,21 @@ function titleToSlug(title) {
 //   4. Any series topic
 //   5. Random standalone topic
 function selectNextTopic(topics, generatedTopics) {
+  const generatedTitleSet = buildGeneratedTitleSet(generatedTopics);
   const unusedTopics = topics.filter(
-    topic => !generatedTopics.includes(topic.title)
+    topic => !generatedTitleSet.has(normalizeTitle(topic.title))
   );
 
   if (unusedTopics.length === 0) {
-    // All topics used, reset and start over
-    console.log('All topics have been used. Resetting...');
-    return topics[Math.floor(Math.random() * topics.length)];
+    console.log('All configured topics have already been generated. Nothing to do.');
+    return null;
   }
 
   // Convert generated topics to slug format for matching
-  const generatedSlugs = generatedTopics.map(titleToSlug);
+  const generatedSlugs = [
+    ...generatedTopics,
+    ...getExistingGuideTitles()
+  ].map(titleToSlug);
 
   // PRIORITY 1: Complete in-progress series (previous part already published)
   const continueSeriesTopics = unusedTopics.filter(topic => {
@@ -734,6 +768,15 @@ async function createGuideFile(topic, content, imageData) {
   const filename = createFilename(topic.title);
   const filepath = path.join(GUIDES_DIR, filename);
 
+  if (fs.existsSync(filepath)) {
+    throw new Error(`Refusing to overwrite existing guide file: ${filename}`);
+  }
+
+  const existingTitleSet = new Set(getExistingGuideTitles().map(normalizeTitle));
+  if (existingTitleSet.has(normalizeTitle(topic.title))) {
+    throw new Error(`Refusing to create duplicate guide title: ${topic.title}`);
+  }
+
   const date = new Date().toISOString().split('T')[0];
   const description = generateDescription(topic.title, topic.difficulty);
 
@@ -957,18 +1000,22 @@ async function main() {
   try {
     console.log('Starting guide generation...');
 
-    // Check for API key
-    if (!process.env.NVIDIA_API_KEY) {
-      throw new Error('NVIDIA_API_KEY environment variable is not set');
-    }
-
     // Load topics
     const { topics, generatedTopics } = loadTopics();
     console.log(`Loaded ${topics.length} topics, ${generatedTopics.length} already generated`);
 
     // Select topic
     const topic = selectNextTopic(topics, generatedTopics);
+    if (!topic) {
+      console.log('Guide generation paused cleanly: no unused topics remain.');
+      return;
+    }
     console.log(`Selected topic: ${topic.title} (${topic.difficulty})`);
+
+    // Check for API key only when there is work to do
+    if (!process.env.NVIDIA_API_KEY) {
+      throw new Error('NVIDIA_API_KEY environment variable is not set');
+    }
 
     // Generate content
     console.log('Generating content with NVIDIA API...');
@@ -989,7 +1036,8 @@ async function main() {
     updateSeriesNavigation(topic);
 
     // Update generated topics
-    if (!generatedTopics.includes(topic.title)) {
+    const generatedTitleSet = new Set(generatedTopics.map(normalizeTitle));
+    if (!generatedTitleSet.has(normalizeTitle(topic.title))) {
       generatedTopics.push(topic.title);
       saveGeneratedTopics(generatedTopics);
     }
